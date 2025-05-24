@@ -1,73 +1,84 @@
-# HTML content (index.html)
-index_html = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>gay.cz Padlet – blokace útočníků</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>gay.cz – Padlet</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      width: 100%;
       font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #111;
-      color: white;
+      background-color: #000;
+      color: #fff;
+    }
+    #padlet {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+    .block-message {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #000;
+      color: #fff;
+      padding: 5vw;
+      box-sizing: border-box;
+      overflow-y: auto;
       text-align: center;
     }
-    .messages {
-      max-width: 600px;
-      padding: 20px;
+    .block-message h1 {
+      font-size: 2em;
+      margin-bottom: 1em;
     }
     button {
-      margin-top: 2em;
-      padding: 0.7em 1.5em;
-      font-size: 1em;
-      background-color: #e00;
+      background: #e00;
       color: white;
       border: none;
+      padding: 1em 2em;
+      font-size: 1em;
       border-radius: 8px;
+      margin-top: 2em;
       cursor: pointer;
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
   </style>
+</head>
+<body>
+  <div class="block-message" id="blocked">
+    <h1>Jsi útočník. Od roku 2025 tu nemáš co dělat.</h1>
+    <p><strong>Česky:</strong> Děláš válku... a nepřestáváš... tady už nemáš od roku 2025 co dělat... jdi okamžitě domů!</p>
+    <p><strong>Rusky:</strong> Ты ведёшь войну... и не останавливаешься... тебе здесь больше не место с 2025 года... немедленно уходи домой!</p>
+    <p><strong>Bělorusky:</strong> Ты вядзеш вайну... і не спыняешся... табе тут няма чаго рабіць з 2025 года... ідзі дадому!</p>
+    <p><strong>Korejsky:</strong> 너는 전쟁을 벌이고 있어... 멈추지 않고 있어... 2025년부터 여기는 네 자리가 아니야... 지금 당장 돌아가!</p>
+    <p><strong>Čínsky:</strong> 你在发动战争……你从未停止……从2025年起你不再受欢迎……立刻回家去！</p>
+    <p><strong>Anglicky:</strong> You are making war... and you don't stop... since 2025 you're not welcome here... go home immediately!</p>
+    <button onclick="redirect()">OK – odejít</button>
+  </div>
+
+  <iframe id="padlet" src="https://padlet.com/ecnr/r81r733m87bh" allowfullscreen></iframe>
+
   <script>
+    function redirect() {
+      window.location.href = "https://www.kunaicho.go.jp/eindex.html";
+    }
+
     fetch("https://ipapi.co/json/")
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        const blockedCountries = ["RU", "BY", "KP", "CN"];
-        if (blockedCountries.includes(data.country)) {
-          window.open(
-            "https://www.un.org/en/about-us/universal-declaration-of-human-rights",
-            "_blank",
-            "width=1000,height=800"
-          );
-          document.body.innerHTML = `
-            <div class="messages">
-              <h1>Jsi útočník. Od roku 2025 tu nemáš co dělat.</h1>
-              <p><strong>Česky:</strong> Děláš válku... a nepřestáváš... tady už nemáš od roku 2025 co dělat... jdi okamžitě domů!</p>
-              <p><strong>Rusky:</strong> Ты ведёшь войну... и не останавливаешься... тебе здесь больше не место с 2025 года... немедленно уходи домой!</p>
-              <p><strong>Bělorusky:</strong> Ты вядзеш вайну... і не спыняешся... табе тут няма чаго рабіць з 2025 года... ідзі дадому!</p>
-              <p><strong>Korejsky:</strong> 너는 전쟁을 벌이고 있어... 멈추지 않고 있어... 2025년부터 여기는 네 자리가 아니야... 지금 당장 돌아가!</p>
-              <p><strong>Čínsky:</strong> 你在发动战争……你从未停止……从2025年起你不再受欢迎……立刻回家去！</p>
-              <p><strong>Anglicky:</strong> You are making war... and you don't stop... since 2025 you're not welcome here... go home immediately!</p>
-              <button onclick="window.location.href='https://www.kunaicho.go.jp/eindex.html'">OK – odejít</button>
-            </div>
-          `;
-          setTimeout(() => {
-            window.location.href = "https://www.kunaicho.go.jp/eindex.html";
-          }, 8000);
+        const blocked = ["RU", "BY", "KP", "CN"];
+        if (blocked.includes(data.country)) {
+          document.getElementById("blocked").style.display = "block";
+          window.open("https://www.un.org/en/about-us/universal-declaration-of-human-rights", "_blank", "width=1000,height=800");
+          setTimeout(redirect, 8000);
+        } else {
+          document.getElementById("padlet").style.display = "block";
         }
       });
   </script>
-</head>
-<body>
-  <iframe src="https://padlet.com/ecnr/r81r733m87bh" allowfullscreen></iframe>
 </body>
 </html>
